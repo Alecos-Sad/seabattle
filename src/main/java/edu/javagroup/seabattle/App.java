@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * закомментировать после выполнения задач и тестов
  */
 import org.springframework.boot.SpringApplication;
+import org.springframework.util.StringUtils;
 
 /*
  * убрать комментарий после выполнения задач и тестов
@@ -32,6 +33,7 @@ public class App {
          * закомментировать после выполнения задач и тестов
          */
         SpringApplication.run(App.class, args);
+
 
         /*
          * убрать комментарий после выполнения задач и тестов
