@@ -13,4 +13,6 @@ public class Constans{
     public String M_BUTTON_PREFIX = BUTTON_PREFIX.concat(MINE);
     public String E_BUTTON_PREFIX = BUTTON_PREFIX.concat(ENEMY);
     public String BUTTON_POSTFIX = "ActionPerformed";
+    public static String IP = "127.0.0.1";
+    public static String LOCAL = "localhost";
 }
