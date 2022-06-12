@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PointElement extends ModelValue implements Comparable<PointElement> {
-    private final int col;
+    private final Integer col;
 
     public PointElement(int col, int value) {
         super(value);
@@ -16,6 +16,6 @@ public class PointElement extends ModelValue implements Comparable<PointElement>
 
     @Override
     public int compareTo(PointElement pointElement) {
-        return pointElement.getCol();
+        return getCol().compareTo(pointElement.getCol());
     }
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 public class ShipPoint extends ModelValue implements Comparable<ShipPoint> {
-    private final int point;
+    private final Integer point;
 
     public ShipPoint(int point, int value) {
         super(value);
@@ -21,6 +21,7 @@ public class ShipPoint extends ModelValue implements Comparable<ShipPoint> {
 
     @Override
     public int compareTo(ShipPoint shipPoint) {
-        return shipPoint.point;
+
+        return getPoint().compareTo(shipPoint.getPoint());
     }
 }
