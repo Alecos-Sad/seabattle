@@ -31,4 +31,8 @@ public class MinePanelSingleton {
         }
         return instance;
     }
+
+    public List<HorizontalLine> getPanel() {
+        return panel;
+    }
 }

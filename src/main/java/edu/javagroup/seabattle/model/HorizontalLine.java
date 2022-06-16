@@ -33,6 +33,10 @@ public class HorizontalLine extends ModelRow implements Comparable<HorizontalLin
         return pointElementList;
     }
 
+    public void setPointElementList(List<PointElement> pointElementList) {
+        this.pointElementList = pointElementList;
+    }
+
     @Override
     public int compareTo(HorizontalLine horizontalLine) {
         return Character.toString(getRow()).compareToIgnoreCase(Character.toString(horizontalLine.getRow()));
