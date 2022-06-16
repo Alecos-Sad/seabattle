@@ -18,25 +18,23 @@ public class Initializer {
         EnemyReadySingleton.instance(false);
         ForbiddenCellsSingleton.instance(new HashMap<>(0));
 
-        Map<String, Integer> examp = new HashMap<>();
-        examp.put("1deck", 0);
-        examp.put("2deck", 0);
-        examp.put("3deck", 0);
-        examp.put("4deck", 0);
-        ShipStorageSingleton.instance(examp);
+        Map<String, Integer> example = new HashMap<>();
+        example.put("1deck", 0);
+        example.put("2deck", 0);
+        example.put("3deck", 0);
+        example.put("4deck", 0);
+        ShipStorageSingleton.instance(example);
 
-        List<HorizontalLine> horizontCollectMine = new ArrayList<>(10);
+        List<HorizontalLine> horizontalCollectMine = new ArrayList<>(10);
         for (int i = 0; i < Constants.VERTICAL_COORDINATE.length(); i++) {
-            horizontCollectMine.add(new HorizontalLine(Constants.VERTICAL_COORDINATE.charAt(i)));
+            horizontalCollectMine.add(new HorizontalLine(Constants.VERTICAL_COORDINATE.charAt(i)));
         }
 
-        MinePanelSingleton.instance(horizontCollectMine);
-
-
-        List<HorizontalLine> horizontCollectEnemy = new ArrayList<>(10);
+        MinePanelSingleton.instance(horizontalCollectMine);
+        List<HorizontalLine> horizontalCollectEnemy = new ArrayList<>(10);
         for (int i = 0; i < Constants.VERTICAL_COORDINATE.length(); i++) {
-            horizontCollectEnemy.add(new HorizontalLine(Constants.VERTICAL_COORDINATE.charAt(i)));
+            horizontalCollectEnemy.add(new HorizontalLine(Constants.VERTICAL_COORDINATE.charAt(i)));
         }
-        EnemyPanelSingleton.instance(horizontCollectEnemy);
+        EnemyPanelSingleton.instance(horizontalCollectEnemy);
     }
 }

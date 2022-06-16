@@ -10,8 +10,9 @@ import lombok.Getter;
  * запретить менять состояние поля point
  * создать конструктор принимающий поля point и value (см. ModelValue), порядок параметров конструктора важен
  */
-@Getter
+
 public class ShipPoint extends ModelValue implements Comparable<ShipPoint> {
+    @Getter
     private final Integer point;
 
     public ShipPoint(int point, int value) {
