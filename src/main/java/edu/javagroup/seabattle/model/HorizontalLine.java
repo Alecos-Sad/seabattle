@@ -1,6 +1,7 @@
 package edu.javagroup.seabattle.model;
 
 import edu.javagroup.seabattle.model.parent.ModelRow;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -16,8 +17,10 @@ import java.util.List;
  * заполнить ее десятью элементами, в которых поле col конструктора PointElement постоянно прирастает от 1 до 10,
  * а value всегда 0 эту полученную коллекцию необходимо записать в поле текущего класса
  */
-@Setter
+
 public class HorizontalLine extends ModelRow implements Comparable<HorizontalLine> {
+    @Getter
+    @Setter
     private List<PointElement> pointElementList;
 
     public HorizontalLine(char row) {
@@ -27,14 +30,6 @@ public class HorizontalLine extends ModelRow implements Comparable<HorizontalLin
             tempList.add(i, new PointElement(i + 1, 0));
         }
         this.pointElementList = tempList;
-    }
-
-    public List<PointElement> getPointElementList() {
-        return pointElementList;
-    }
-
-    public void setPointElementList(List<PointElement> pointElementList) {
-        this.pointElementList = pointElementList;
     }
 
     @Override

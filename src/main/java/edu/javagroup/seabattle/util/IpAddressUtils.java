@@ -4,7 +4,6 @@ import edu.javagroup.seabattle.constants.Constants;
 
 import java.util.Arrays;
 
-
 public class IpAddressUtils {
     /**
      * входные параметры: String

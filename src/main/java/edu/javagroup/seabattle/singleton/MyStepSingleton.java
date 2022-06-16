@@ -1,5 +1,10 @@
 package edu.javagroup.seabattle.singleton;
 
+/**
+ * MyStepSingleton
+ * у него должно быть поле представленное булевым значением
+ * и это поле должно возвращаться методом myStep
+ */
 public class MyStepSingleton {
     private static volatile MyStepSingleton instance;
     private final Boolean myStep;

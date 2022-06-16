@@ -1,5 +1,10 @@
 package edu.javagroup.seabattle.singleton;
 
+/**
+ * EnemyReadySingleton
+ * у него должно быть поле представленное булевым значением
+ * и это поле должно возвращаться методом enemyReady
+ */
 public class EnemyReadySingleton {
     private static EnemyReadySingleton instance;
     private final Boolean enemyReady;

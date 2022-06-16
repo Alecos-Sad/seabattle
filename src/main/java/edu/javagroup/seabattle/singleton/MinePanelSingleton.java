@@ -22,7 +22,7 @@ public class MinePanelSingleton {
 
     public static MinePanelSingleton instance(List<HorizontalLine> panel) {
         MinePanelSingleton singleton = instance;
-        if (instance == null) {
+        if (singleton == null) {
             instance = new MinePanelSingleton(new ArrayList<>(0));
         }
         if (panel != null) {
@@ -32,7 +32,7 @@ public class MinePanelSingleton {
         return instance;
     }
 
-    public List<HorizontalLine> getPanel() {
-        return panel;
+    public static List<HorizontalLine> getPanel() {
+        return MinePanelSingleton.instance.panel;
     }
 }
