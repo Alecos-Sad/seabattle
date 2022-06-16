@@ -32,6 +32,7 @@ public class PanelServiceImpl implements PanelService {
     public boolean isPanelEmpty() {
         List<HorizontalLine> pane = MinePanelSingleton.getPanel();
         List<PointElement> pp = pane.get(0).getPointElementList();
+        //
 
         return false;
     }
