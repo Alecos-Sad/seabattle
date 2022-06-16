@@ -34,7 +34,7 @@ public class IpAddressUtils {
         }
 
         for (String s : ip.split("\\.")) {
-            if (s.equals("")) {
+            if (s.equals("") || s.length() > 3) {
                 return false;
             }
         }

@@ -16,7 +16,7 @@ public class NumberUtils {
             return false;
         }
 
-        if (str.contains(".") || str.contains("-")) {
+        if (str.contains(".") || str.contains("-") || str.contains(" ")) {
             return false;
         }
 

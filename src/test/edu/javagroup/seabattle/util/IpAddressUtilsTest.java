@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author kaa
- * @version 1.1
+ * @version 1.2
  */
 @SpringBootTest
 public class IpAddressUtilsTest {
@@ -51,10 +51,14 @@ public class IpAddressUtilsTest {
         assertThat(IpAddressUtils.isIpAddress("1.1.-1.1")).isFalse();
         assertThat(IpAddressUtils.isIpAddress("1.1.1.-1")).isFalse();
         assertThat(IpAddressUtils.isIpAddress("a.b.c.d")).isFalse();
+        assertThat(IpAddressUtils.isIpAddress("0.1.1.1")).isFalse();
+        assertThat(IpAddressUtils.isIpAddress("00.1.1.1")).isFalse();
+        assertThat(IpAddressUtils.isIpAddress("000.1.1.1")).isFalse();
         assertThat(IpAddressUtils.isIpAddress("19a.b68.c.1d1")).isFalse();
+        assertThat(IpAddressUtils.isIpAddress("0001.0000.0000.0000")).isFalse();
+        assertThat(IpAddressUtils.isIpAddress("it's.very.long.line")).isFalse();
         assertThat(IpAddressUtils.isIpAddress("1.0.0.0")).isTrue();
         assertThat(IpAddressUtils.isIpAddress("001.000.000.000")).isTrue();
-        assertThat(IpAddressUtils.isIpAddress("0001.0000.0000.0000")).isTrue();
         assertThat(IpAddressUtils.isIpAddress("192.168.010.011")).isTrue();
         assertThat(IpAddressUtils.isIpAddress("192.168.001.011")).isTrue();
     }

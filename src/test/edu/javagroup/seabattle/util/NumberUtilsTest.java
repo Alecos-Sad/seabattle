@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author kaa
- * @version 1.2
+ * @version 1.3
  */
 @SpringBootTest
 public class NumberUtilsTest {
@@ -16,8 +16,12 @@ public class NumberUtilsTest {
     void numberUtilsTest() {
         assertThat(NumberUtils.isNumber(null)).isFalse();
         assertThat(NumberUtils.isNumber("")).isFalse();
+        assertThat(NumberUtils.isNumber(" ")).isFalse();
         assertThat(NumberUtils.isNumber("-1")).isFalse();
+        assertThat(NumberUtils.isNumber("1-")).isFalse();
         assertThat(NumberUtils.isNumber("1.2")).isFalse();
+        assertThat(NumberUtils.isNumber("1a")).isFalse();
+        assertThat(NumberUtils.isNumber("a1")).isFalse();
         assertThat(NumberUtils.isNumber("0")).isTrue();
         assertThat(NumberUtils.isNumber("1")).isTrue();
     }
