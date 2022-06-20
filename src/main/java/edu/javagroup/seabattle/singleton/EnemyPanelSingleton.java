@@ -21,8 +21,7 @@ public class EnemyPanelSingleton {
     }
 
     public static EnemyPanelSingleton instance(List<HorizontalLine> panel) {
-        EnemyPanelSingleton singleton = instance;
-        if (singleton == null) {
+        if (instance == null) {
             instance = new EnemyPanelSingleton(new ArrayList<>(0));
         }
         if (panel != null) {
@@ -32,7 +31,7 @@ public class EnemyPanelSingleton {
         return instance;
     }
 
-    public List<HorizontalLine> getPanel() {
-        return panel;
+    public static List<HorizontalLine> getPanel() {
+        return EnemyPanelSingleton.instance.panel;
     }
 }

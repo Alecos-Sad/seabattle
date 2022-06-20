@@ -13,7 +13,7 @@ import java.util.List;
  * должен быть метод getPanel который возвращает эту коллекцию
  */
 public class MinePanelSingleton {
-    private static volatile MinePanelSingleton instance;
+    private static MinePanelSingleton instance;
     private final List<HorizontalLine> panel;
 
     private MinePanelSingleton(List<HorizontalLine> panel) {
@@ -21,8 +21,7 @@ public class MinePanelSingleton {
     }
 
     public static MinePanelSingleton instance(List<HorizontalLine> panel) {
-        MinePanelSingleton singleton = instance;
-        if (singleton == null) {
+        if (instance == null) {
             instance = new MinePanelSingleton(new ArrayList<>(0));
         }
         if (panel != null) {

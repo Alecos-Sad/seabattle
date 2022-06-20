@@ -1,7 +1,11 @@
 package edu.javagroup.seabattle.singleton;
 
+/**
+ * ImReadySingleton
+ * у него должно быть поле представленное булевым значением
+ * и это поле должно возвращаться методом imReady
+ */
 public class ImReadySingleton {
-
     private static ImReadySingleton instance;
     private final Boolean imReady;
 
@@ -10,8 +14,7 @@ public class ImReadySingleton {
     }
 
     public static ImReadySingleton instance(Boolean imReady) {
-        ImReadySingleton singleton = instance;
-        if (singleton == null) {
+        if (instance == null) {
             instance = new ImReadySingleton(false);
         }
         if (imReady != null) {
