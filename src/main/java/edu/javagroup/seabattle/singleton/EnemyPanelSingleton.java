@@ -31,7 +31,7 @@ public class EnemyPanelSingleton {
         return instance;
     }
 
-    public static List<HorizontalLine> getPanel() {
-        return EnemyPanelSingleton.instance.panel;
+    public List<HorizontalLine> getPanel() {
+        return panel;
     }
 }

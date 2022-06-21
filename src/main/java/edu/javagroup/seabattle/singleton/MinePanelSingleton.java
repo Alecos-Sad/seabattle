@@ -31,7 +31,7 @@ public class MinePanelSingleton {
         return instance;
     }
 
-    public static List<HorizontalLine> getPanel() {
-        return MinePanelSingleton.instance.panel;
+    public List<HorizontalLine> getPanel() {
+        return panel;
     }
 }

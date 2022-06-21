@@ -6,7 +6,7 @@ package edu.javagroup.seabattle.singleton;
  * и это поле должно возвращаться методом imReady
  */
 public class ImReadySingleton {
-    private static ImReadySingleton instance;
+    public static ImReadySingleton instance;
     private final Boolean imReady;
 
     private ImReadySingleton(Boolean imReady) {
@@ -27,3 +27,4 @@ public class ImReadySingleton {
         return imReady;
     }
 }
+
