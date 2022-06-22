@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static edu.javagroup.seabattle.constants.Constants.ENEMY;
+import static edu.javagroup.seabattle.constants.Constants.MINE;
+
 /**
  * создать имплементацию этого класса в подпакете impl
  * пометить ее аннотацией @Component
@@ -31,7 +34,7 @@ public class PanelServiceImpl implements PanelService {
      */
     @Override
     public boolean isPanelEmpty() {
-        return countPointElements(0, 1) == 100;
+        return countPointElements(0, MINE) == 100;
     }
 
     /**
@@ -46,7 +49,7 @@ public class PanelServiceImpl implements PanelService {
      */
     @Override
     public boolean isFullMinePanel() {
-        return countPointElements(1, 1) == 20;
+        return countPointElements(1, MINE) == 20;
     }
 
     /**
@@ -66,39 +69,39 @@ public class PanelServiceImpl implements PanelService {
      */
     @Override
     public int howMuchIsLeft(String side) {
-        if (side.equals(Constants.MINE)) {
-            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, 1) : 0;
+        if (side.equals(MINE)) {
+            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, side) : 0;
         }
         if (side.equals(Constants.ENEMY)) {
-            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, 2) : 0;
+            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, side) : 0;
         }
         return 0;
     }
 
     @Override
     public boolean checkEndGame(String side) {
-        if (side.equals(Constants.MINE)) {
-            return countPointElements(2, 1) == 20;
+        if (side.equals(MINE)) {
+            return countPointElements(2, side) == 20;
         }
         if (side.equals(Constants.ENEMY)) {
-            return countPointElements(2, 2) == 20;
+            return countPointElements(2, side) == 20;
         }
         return false;
     }
 
-    private int countPointElements(int value, int singleton) {
-        int count = 0;
+    private int countPointElements(int value, String side) {
         List<HorizontalLine> panel;
-        switch (singleton) {
-            case 1:
+        switch (side) {
+            case bMINE:
                 panel = MinePanelSingleton.instance(null).getPanel();
                 break;
-            case 2:
+            case ENEMY:
                 panel = EnemyPanelSingleton.instance(null).getPanel();
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + singleton);
+                throw new IllegalStateException("Unexpected value: " + side);
         }
+        int count = 0;
         for (HorizontalLine horizontalLine : panel) {
             for (PointElement pointElement : horizontalLine.getPointElementList()) {
                 if (pointElement.getValue() == value) {
