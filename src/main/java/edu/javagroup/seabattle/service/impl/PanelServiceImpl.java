@@ -1,6 +1,7 @@
 package edu.javagroup.seabattle.service.impl;
 
 import edu.javagroup.seabattle.constants.Constants;
+import edu.javagroup.seabattle.exeption.SideNotFoundException;
 import edu.javagroup.seabattle.model.HorizontalLine;
 import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
@@ -9,6 +10,9 @@ import edu.javagroup.seabattle.singleton.ImReadySingleton;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static edu.javagroup.seabattle.constants.Constants.ENEMY;
@@ -69,46 +73,42 @@ public class PanelServiceImpl implements PanelService {
      */
     @Override
     public int howMuchIsLeft(String side) {
-        if (side.equals(MINE)) {
-            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, side) : 0;
-        }
-        if (side.equals(Constants.ENEMY)) {
-            return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, side) : 0;
-        }
-        return 0;
+        return ImReadySingleton.instance(null).imReady() ? 20 - countPointElements(2, side) : 0;
     }
 
+    /**
+     * метод: checkEndGame
+     * входные параметры: String (сторона (MINE or ENEMY) выраженная в строке)
+     * возвращает: boolean
+     * реализация:
+     * в зависимости от того, какую сторону мы получили - MINE or ENEMY
+     * получить коллекцию из MinePanelSingleton или EnemyPanelSingleton соответственно
+     * и посчитать в нем количество PointElement с value == 2
+     * если это количество == 20, вернуть true
+     * в идеале, реализация должна быть в одну строку кода
+     * можно выразить в дополнительных методах имплементации
+     * Примечание: смотреть Constants
+     */
     @Override
     public boolean checkEndGame(String side) {
-        if (side.equals(MINE)) {
             return countPointElements(2, side) == 20;
-        }
-        if (side.equals(Constants.ENEMY)) {
-            return countPointElements(2, side) == 20;
-        }
-        return false;
     }
 
     private int countPointElements(int value, String side) {
         List<HorizontalLine> panel;
-        switch (side) {
-            case MINE:
-                panel = MinePanelSingleton.instance(null).getPanel();
-                break;
-            case ENEMY:
-                panel = EnemyPanelSingleton.instance(null).getPanel();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + side);
+        if (side.equalsIgnoreCase(MINE)) {
+            panel = MinePanelSingleton.instance(null).getPanel();
+        } else if (side.equalsIgnoreCase(ENEMY)) {
+            panel = EnemyPanelSingleton.instance(null).getPanel();
+        } else {
+            throw new SideNotFoundException();
         }
-        int count = 0;
-        for (HorizontalLine horizontalLine : panel) {
-            for (PointElement pointElement : horizontalLine.getPointElementList()) {
-                if (pointElement.getValue() == value) {
-                    count++;
-                }
-            }
-        }
-        return count;
+       return (int) panel
+                .stream()
+                .map(HorizontalLine::getPointElementList)
+                .flatMap(Collection::stream)
+                .filter(pointElement -> pointElement.getValue() == value)
+                .count();
     }
 }
+
