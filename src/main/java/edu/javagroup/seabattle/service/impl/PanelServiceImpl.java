@@ -92,7 +92,7 @@ public class PanelServiceImpl implements PanelService {
     private int countPointElements(int value, String side) {
         List<HorizontalLine> panel;
         switch (side) {
-            case bMINE:
+            case MINE:
                 panel = MinePanelSingleton.instance(null).getPanel();
                 break;
             case ENEMY:
