@@ -1,7 +1,7 @@
 package edu.javagroup.seabattle.service;
 
 /**
- * создать в нем интерфейс PanelService
+ * создать интерфейс PanelService
  * с методами:
  * boolean isPanelEmpty()
  * boolean isFullMinePanel()

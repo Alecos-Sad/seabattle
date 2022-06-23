@@ -1,21 +1,14 @@
 package edu.javagroup.seabattle.service.impl;
 
-import edu.javagroup.seabattle.constants.Constants;
-import edu.javagroup.seabattle.exeption.SideNotFoundException;
 import edu.javagroup.seabattle.model.HorizontalLine;
-import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
-import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
 import edu.javagroup.seabattle.singleton.ImReadySingleton;
-import edu.javagroup.seabattle.singleton.MinePanelSingleton;
+import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static edu.javagroup.seabattle.constants.Constants.ENEMY;
 import static edu.javagroup.seabattle.constants.Constants.MINE;
 
 /**
@@ -91,19 +84,16 @@ public class PanelServiceImpl implements PanelService {
      */
     @Override
     public boolean checkEndGame(String side) {
-            return countPointElements(2, side) == 20;
+        return countPointElements(2, side) == 20;
     }
 
+    /**
+     * метод получает коллекцию из MinePanelSingleton или EnemyPanelSingleton соответственно
+     * и посчитывает в нем количество PointElement с value
+     */
     private int countPointElements(int value, String side) {
-        List<HorizontalLine> panel;
-        if (side.equalsIgnoreCase(MINE)) {
-            panel = MinePanelSingleton.instance(null).getPanel();
-        } else if (side.equalsIgnoreCase(ENEMY)) {
-            panel = EnemyPanelSingleton.instance(null).getPanel();
-        } else {
-            throw new SideNotFoundException();
-        }
-       return (int) panel
+        List<HorizontalLine> panel = HorizontalLinesUtils.getHorizontalLines(side);
+        return (int) panel
                 .stream()
                 .map(HorizontalLine::getPointElementList)
                 .flatMap(Collection::stream)
