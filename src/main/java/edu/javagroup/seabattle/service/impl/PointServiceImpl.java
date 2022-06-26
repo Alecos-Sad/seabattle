@@ -1,20 +1,13 @@
 package edu.javagroup.seabattle.service.impl;
 
-import edu.javagroup.seabattle.constants.Constants;
 import edu.javagroup.seabattle.model.HorizontalLine;
-import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
-
-import static edu.javagroup.seabattle.constants.Constants.ENEMY;
-import static edu.javagroup.seabattle.constants.Constants.MINE;
 
 /**
  * создать имплементацию этого класса в подпакете impl
