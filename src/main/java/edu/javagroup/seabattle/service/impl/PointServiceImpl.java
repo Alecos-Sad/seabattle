@@ -1,6 +1,7 @@
 package edu.javagroup.seabattle.service.impl;
 
 import edu.javagroup.seabattle.constants.Constants;
+import edu.javagroup.seabattle.constants.Constants.*;
 import edu.javagroup.seabattle.model.HorizontalLine;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
@@ -59,7 +60,7 @@ public class PointServiceImpl implements PointService {
     public boolean setSidePoint(String side, char row, int col, int value) {
         List<HorizontalLine> panel;
         panel = HorizontalLinesUtils.getHorizontalLines(side);
-        panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col).setValue(value);
+        panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col - 1).setValue(value);
         if (side.equals(Constants.MINE)) {
             MinePanelSingleton.instance(panel);
             return true;
@@ -70,9 +71,16 @@ public class PointServiceImpl implements PointService {
         return false;
     }
 
+    /**
+     * метод: isClearPoint
+     * входные параметры: char, int
+     * возвращает: boolean
+     * реализация:
+     * вызвать метод isOccupiedCell c value 0
+     */
     @Override
     public boolean isClearPoint(char row, int col) {
-        return false;
+        return isOccupiedCell(row, col, 0);
     }
 
     @Override
@@ -88,8 +96,17 @@ public class PointServiceImpl implements PointService {
 
     }
 
-    public boolean isOccupiedCell(char row, int col) {
-        return false;
+    /**
+     * метод: isOccupiedCell
+     * входные параметры: char, int, int
+     * возвращает: boolean
+     * реализация:
+     * выяснить, занята ли указанная ячейка, указанным значением
+     */
+    public boolean isOccupiedCell(char row, int col, int value) {
+        List<HorizontalLine> panel;
+        panel = MinePanelSingleton.instance(null).getPanel();
+        return panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col - 1).getValue() == value;
     }
 
     public void setForbiddenCells() {
