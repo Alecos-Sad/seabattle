@@ -1,8 +1,11 @@
 package edu.javagroup.seabattle.service.impl;
 
+import edu.javagroup.seabattle.constants.Constants;
 import edu.javagroup.seabattle.model.HorizontalLine;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
+import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
+import edu.javagroup.seabattle.singleton.MinePanelSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -40,14 +43,30 @@ public class PointServiceImpl implements PointService {
         }
     }
 
+    /**
+     * метод: setSidePoint
+     * входные параметры: String, char, int, int
+     * возвращает: boolean
+     * реализация:
+     * в зависимости от side выбрать нужный singleton
+     * MinePanelSingleton или EnemyPanelSingleton
+     * из него получить коллекцию и установить в нужную ячейку указанное value
+     * затем, в зависимости от side, сохранить эту коллекцию в нужный singleton (необязательно)
+     * вернуть true
+     * отдельно в конце всего кода вернуть false
+     */
     @Override
     public boolean setSidePoint(String side, char row, int col, int value) {
         List<HorizontalLine> panel;
         panel = HorizontalLinesUtils.getHorizontalLines(side);
-
-
-
-
+        panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col).setValue(value);
+        if (side.equals(Constants.MINE)) {
+            MinePanelSingleton.instance(panel);
+            return true;
+        } else if (side.equals(Constants.ENEMY)) {
+            EnemyPanelSingleton.instance(panel);
+            return true;
+        }
         return false;
     }
 
