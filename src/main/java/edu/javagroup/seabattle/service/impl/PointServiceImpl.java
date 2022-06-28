@@ -3,16 +3,21 @@ package edu.javagroup.seabattle.service.impl;
 import edu.javagroup.seabattle.constants.Constants;
 import edu.javagroup.seabattle.constants.Constants.*;
 import edu.javagroup.seabattle.model.HorizontalLine;
+import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
 import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
+import edu.javagroup.seabattle.singleton.ForbiddenCellsSingleton;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
 import edu.javagroup.seabattle.singleton.MyStepSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
+import edu.javagroup.seabattle.util.NumberUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * создать имплементацию этого класса в подпакете impl
@@ -86,11 +91,11 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public boolean getBomb(char row, int col) {
-        if (isOccupiedCell(row,col,0) || isOccupiedCell(row,col,2)){
-            setSidePoint(Constants.MINE,row,col,3);
+        if (isOccupiedCell(row, col, 0) || isOccupiedCell(row, col, 2)) {
+            setSidePoint(Constants.MINE, row, col, 3);
             MyStepSingleton.instance(true);
-        } else if (isOccupiedCell(row,col,1)){
-            setSidePoint(Constants.MINE,row,col,2);
+        } else if (isOccupiedCell(row, col, 1)) {
+            setSidePoint(Constants.MINE, row, col, 2);
             MyStepSingleton.instance(false);
             return true;
         }
@@ -119,6 +124,17 @@ public class PointServiceImpl implements PointService {
     }
 
     public void setForbiddenCells() {
+        Map<String, Boolean> forbiddenCellsMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
+        forbiddenCellsMap.clear();
+        List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
+        for (HorizontalLine horizontalLine : panel) {
+            for (PointElement pointElement : horizontalLine.getPointElementList()) {
+                if (pointElement.getValue() == 1) {
+                    String key = horizontalLine.getRow() + NumberUtils.currentNumber(pointElement.getCol());
+                    forbiddenCellsMap.put(key, true);
 
+                }
+            }
+        }
     }
 }
