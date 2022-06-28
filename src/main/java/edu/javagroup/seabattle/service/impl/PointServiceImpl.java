@@ -6,12 +6,17 @@ import edu.javagroup.seabattle.model.HorizontalLine;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
 import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
+import edu.javagroup.seabattle.singleton.ForbiddenCellsSingleton;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
+import edu.javagroup.seabattle.singleton.MyStepSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
+import edu.javagroup.seabattle.util.NumberUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * создать имплементацию этого класса в подпакете impl
@@ -20,11 +25,15 @@ import java.util.List;
  * private final PanelService panelService
  * инициализировать поле в конструкторе за счет входного параметра
  */
-@AllArgsConstructor
+
 @Component
 public class PointServiceImpl implements PointService {
 
     private final PanelService panelService;
+
+    public PointServiceImpl(PanelServiceImpl panelService) {
+        this.panelService = panelService;
+    }
 
     /**
      * метод: setShipPoint
@@ -85,10 +94,20 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public boolean getBomb(char row, int col) {
+        if (isOccupiedCell(row, col, 0) || isOccupiedCell(row, col, 2)) {
+            setSidePoint(Constants.MINE, row, col, 3);
+            MyStepSingleton.instance(true);
+        } else if (isOccupiedCell(row, col, 1)) {
+            setSidePoint(Constants.MINE, row, col, 2);
+            MyStepSingleton.instance(false);
+            return true;
+        }
         return false;
     }
 
     public void addShipPoint(char row, int col) {
+        Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
+       String key = (row + NumberUtils.currentNumber(col));
 
     }
 

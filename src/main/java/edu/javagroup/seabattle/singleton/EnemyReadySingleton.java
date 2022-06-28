@@ -14,8 +14,7 @@ public class EnemyReadySingleton {
     }
 
     public static EnemyReadySingleton instance(Boolean enemyReady){
-        EnemyReadySingleton singleton = instance;
-        if (singleton == null) {
+        if (instance == null) {
             instance = new EnemyReadySingleton(false);
         }
         if (enemyReady != null) {
@@ -23,7 +22,7 @@ public class EnemyReadySingleton {
         }
         return instance;
     }
-    public Boolean imReady() {
+    public Boolean enemyReady() {
         return enemyReady;
     }
 }
