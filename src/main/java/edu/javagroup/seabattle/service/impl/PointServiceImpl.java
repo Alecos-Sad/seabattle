@@ -7,6 +7,7 @@ import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
 import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
+import edu.javagroup.seabattle.singleton.MyStepSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -85,6 +86,14 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public boolean getBomb(char row, int col) {
+        if (isOccupiedCell(row,col,0) || isOccupiedCell(row,col,2)){
+            setSidePoint(Constants.MINE,row,col,3);
+            MyStepSingleton.instance(true);
+        } else if (isOccupiedCell(row,col,1)){
+            setSidePoint(Constants.MINE,row,col,2);
+            MyStepSingleton.instance(false);
+            return true;
+        }
         return false;
     }
 
