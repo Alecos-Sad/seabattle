@@ -6,7 +6,7 @@ package edu.javagroup.seabattle.singleton;
  * и это поле должно возвращаться методом myStep
  */
 public class MyStepSingleton {
-    private static volatile MyStepSingleton instance;
+    private static MyStepSingleton instance;
     private final Boolean myStep;
 
     private MyStepSingleton(Boolean imReady) {
@@ -14,8 +14,7 @@ public class MyStepSingleton {
     }
 
     public static MyStepSingleton instance(Boolean myStep) {
-        MyStepSingleton singleton = instance;
-        if (singleton == null) {
+       if (instance == null) {
             instance = new MyStepSingleton(false);
         }
         if (myStep != null) {

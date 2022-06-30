@@ -3,6 +3,7 @@ package edu.javagroup.seabattle.service.impl;
 import edu.javagroup.seabattle.constants.Constants;
 import edu.javagroup.seabattle.constants.Constants.*;
 import edu.javagroup.seabattle.model.HorizontalLine;
+import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.service.PointService;
 import edu.javagroup.seabattle.singleton.EnemyPanelSingleton;
@@ -11,6 +12,7 @@ import edu.javagroup.seabattle.singleton.MinePanelSingleton;
 import edu.javagroup.seabattle.singleton.MyStepSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import edu.javagroup.seabattle.util.NumberUtils;
+import edu.javagroup.seabattle.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,15 +27,11 @@ import java.util.Map;
  * private final PanelService panelService
  * инициализировать поле в конструкторе за счет входного параметра
  */
-
+@AllArgsConstructor
 @Component
 public class PointServiceImpl implements PointService {
 
     private final PanelService panelService;
-
-    public PointServiceImpl(PanelServiceImpl panelService) {
-        this.panelService = panelService;
-    }
 
     /**
      * метод: setShipPoint
@@ -107,7 +105,7 @@ public class PointServiceImpl implements PointService {
 
     public void addShipPoint(char row, int col) {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
-       String key = (row + NumberUtils.currentNumber(col));
+        String key = (row + NumberUtils.currentNumber(col));
 
     }
 
@@ -129,6 +127,28 @@ public class PointServiceImpl implements PointService {
     }
 
     public void setForbiddenCells() {
-
+        Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
+        forbiddenMap.clear();
+        List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
+        for(HorizontalLine horizontalLine : panel){
+            for(PointElement pointElement : horizontalLine.getPointElementList()){
+                if (pointElement.getValue() == 1){
+                    String key = horizontalLine.getRow() + NumberUtils.currentNumber(pointElement.getCol());
+                    String keyBefore = StringUtils.letterBefore(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                    String keyBefore2 = StringUtils.letterBefore(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                    String keyAfter = StringUtils.letterAfter(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                    String keyAfter2 = StringUtils.letterAfter(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                    forbiddenMap.put(key, true);
+                    forbiddenMap.put(keyBefore,true);
+                    forbiddenMap.put(keyBefore2,true);
+                    forbiddenMap.put(keyAfter,true);
+                    forbiddenMap.put(keyAfter2,true);
+                }
+            }
+        }
     }
 }
