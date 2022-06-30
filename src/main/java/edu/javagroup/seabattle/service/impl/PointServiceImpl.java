@@ -1,7 +1,6 @@
 package edu.javagroup.seabattle.service.impl;
 
 import edu.javagroup.seabattle.constants.Constants;
-import edu.javagroup.seabattle.constants.Constants.*;
 import edu.javagroup.seabattle.model.HorizontalLine;
 import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
@@ -20,6 +19,8 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
+import static edu.javagroup.seabattle.constants.Constants.MINE;
+
 /**
  * создать имплементацию этого класса в подпакете impl
  * пометить ее аннотацией @Component
@@ -27,11 +28,15 @@ import java.util.Map;
  * private final PanelService panelService
  * инициализировать поле в конструкторе за счет входного параметра
  */
-@AllArgsConstructor
+
 @Component
 public class PointServiceImpl implements PointService {
 
     private final PanelService panelService;
+
+    public PointServiceImpl(PanelService panelService) {
+        this.panelService = panelService;
+    }
 
     /**
      * метод: setShipPoint
@@ -68,7 +73,7 @@ public class PointServiceImpl implements PointService {
         List<HorizontalLine> panel;
         panel = HorizontalLinesUtils.getHorizontalLines(side);
         panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col - 1).setValue(value);
-        if (side.equals(Constants.MINE)) {
+        if (side.equals(MINE)) {
             MinePanelSingleton.instance(panel);
             return true;
         } else if (side.equals(Constants.ENEMY)) {
@@ -93,10 +98,10 @@ public class PointServiceImpl implements PointService {
     @Override
     public boolean getBomb(char row, int col) {
         if (isOccupiedCell(row, col, 0) || isOccupiedCell(row, col, 2)) {
-            setSidePoint(Constants.MINE, row, col, 3);
+            setSidePoint(MINE, row, col, 3);
             MyStepSingleton.instance(true);
         } else if (isOccupiedCell(row, col, 1)) {
-            setSidePoint(Constants.MINE, row, col, 2);
+            setSidePoint(MINE, row, col, 2);
             MyStepSingleton.instance(false);
             return true;
         }
@@ -106,11 +111,18 @@ public class PointServiceImpl implements PointService {
     public void addShipPoint(char row, int col) {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
         String key = (row + NumberUtils.currentNumber(col));
-
+        if (!forbiddenMap.getOrDefault(key,false)){
+            if (!panelService.isFullMinePanel()){
+                if (setSidePoint(MINE,row,col,1)){
+                    setForbiddenCells();
+                } else JOptionPane.showMessageDialog(null, "Нельзя использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+            } else JOptionPane.showMessageDialog(null, "Уже занято допустимое количество ячеек", "Внимание!", JOptionPane.WARNING_MESSAGE);
+        } else JOptionPane.showMessageDialog(null, "Не удалось использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
     }
 
     public void clearShipPoint(char row, int col) {
-
+        setSidePoint(MINE,row,col,0);
+        setForbiddenCells();
     }
 
     /**
@@ -135,13 +147,13 @@ public class PointServiceImpl implements PointService {
                 if (pointElement.getValue() == 1){
                     String key = horizontalLine.getRow() + NumberUtils.currentNumber(pointElement.getCol());
                     String keyBefore = StringUtils.letterBefore(horizontalLine.getRow())
-                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                            + NumberUtils.numberBefore(pointElement.getCol());
                     String keyBefore2 = StringUtils.letterBefore(horizontalLine.getRow())
-                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                            + NumberUtils.numberAfter(pointElement.getCol());
                     String keyAfter = StringUtils.letterAfter(horizontalLine.getRow())
-                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                            + NumberUtils.numberBefore(pointElement.getCol());
                     String keyAfter2 = StringUtils.letterAfter(horizontalLine.getRow())
-                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                            + NumberUtils.numberAfter(pointElement.getCol());
                     forbiddenMap.put(key, true);
                     forbiddenMap.put(keyBefore,true);
                     forbiddenMap.put(keyBefore2,true);
