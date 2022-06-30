@@ -9,8 +9,8 @@ public class MyStepSingleton {
     private static MyStepSingleton instance;
     private final Boolean myStep;
 
-    private MyStepSingleton(Boolean myStep) {
-        this.myStep = myStep;
+    private MyStepSingleton(Boolean imReady) {
+        this.myStep = imReady;
     }
 
     public static MyStepSingleton instance(Boolean myStep) {

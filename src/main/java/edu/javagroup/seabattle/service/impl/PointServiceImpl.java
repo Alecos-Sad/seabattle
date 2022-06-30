@@ -12,10 +12,11 @@ import edu.javagroup.seabattle.singleton.MinePanelSingleton;
 import edu.javagroup.seabattle.singleton.MyStepSingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
 import edu.javagroup.seabattle.util.NumberUtils;
+import edu.javagroup.seabattle.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +104,8 @@ public class PointServiceImpl implements PointService {
     }
 
     public void addShipPoint(char row, int col) {
+        Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
+        String key = (row + NumberUtils.currentNumber(col));
 
     }
 
@@ -124,15 +127,26 @@ public class PointServiceImpl implements PointService {
     }
 
     public void setForbiddenCells() {
-        Map<String, Boolean> forbiddenCellsMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
-        forbiddenCellsMap.clear();
+        Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
+        forbiddenMap.clear();
         List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
-        for (HorizontalLine horizontalLine : panel) {
-            for (PointElement pointElement : horizontalLine.getPointElementList()) {
-                if (pointElement.getValue() == 1) {
+        for(HorizontalLine horizontalLine : panel){
+            for(PointElement pointElement : horizontalLine.getPointElementList()){
+                if (pointElement.getValue() == 1){
                     String key = horizontalLine.getRow() + NumberUtils.currentNumber(pointElement.getCol());
-                    forbiddenCellsMap.put(key, true);
-
+                    String keyBefore = StringUtils.letterBefore(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                    String keyBefore2 = StringUtils.letterBefore(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                    String keyAfter = StringUtils.letterAfter(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() - 1);
+                    String keyAfter2 = StringUtils.letterAfter(horizontalLine.getRow())
+                            + NumberUtils.currentNumber(pointElement.getCol() + 1);
+                    forbiddenMap.put(key, true);
+                    forbiddenMap.put(keyBefore,true);
+                    forbiddenMap.put(keyBefore2,true);
+                    forbiddenMap.put(keyAfter,true);
+                    forbiddenMap.put(keyAfter2,true);
                 }
             }
         }

@@ -221,7 +221,7 @@ public class PointServiceTest {
         Map<String, Boolean> map = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
 
         // проверяем размерность заполнения карты
-        assertThat(map.size() == 14).isTrue();
+           assertThat(map.size() == 14).isTrue();
 
         // проверяем корректность установки ключей
         assertThat(map.getOrDefault("A01", false)).isTrue(); // окружаем B02 запретами по диагонали
