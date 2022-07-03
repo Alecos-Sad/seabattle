@@ -22,7 +22,6 @@ public class ShipPoint extends ModelValue implements Comparable<ShipPoint> {
 
     @Override
     public int compareTo(ShipPoint shipPoint) {
-
         return getPoint().compareTo(shipPoint.getPoint());
     }
 }

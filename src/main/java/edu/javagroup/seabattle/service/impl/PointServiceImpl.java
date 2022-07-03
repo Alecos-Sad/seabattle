@@ -111,17 +111,23 @@ public class PointServiceImpl implements PointService {
     public void addShipPoint(char row, int col) {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
         String key = (row + NumberUtils.currentNumber(col));
-        if (!forbiddenMap.getOrDefault(key,false)){
-            if (!panelService.isFullMinePanel()){
-                if (setSidePoint(MINE,row,col,1)){
+        if (!forbiddenMap.getOrDefault(key, false)) {
+            if (!panelService.isFullMinePanel()) {
+                if (setSidePoint(MINE, row, col, 1)) {
                     setForbiddenCells();
-                } else JOptionPane.showMessageDialog(null, "Нельзя использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            } else JOptionPane.showMessageDialog(null, "Уже занято допустимое количество ячеек", "Внимание!", JOptionPane.WARNING_MESSAGE);
-        } else JOptionPane.showMessageDialog(null, "Не удалось использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Нельзя использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Уже занято допустимое количество ячеек", "Внимание!", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Не удалось использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     public void clearShipPoint(char row, int col) {
-        setSidePoint(MINE,row,col,0);
+        setSidePoint(MINE, row, col, 0);
         setForbiddenCells();
     }
 
@@ -142,9 +148,9 @@ public class PointServiceImpl implements PointService {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
         forbiddenMap.clear();
         List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
-        for(HorizontalLine horizontalLine : panel){
-            for(PointElement pointElement : horizontalLine.getPointElementList()){
-                if (pointElement.getValue() == 1){
+        for (HorizontalLine horizontalLine : panel) {
+            for (PointElement pointElement : horizontalLine.getPointElementList()) {
+                if (pointElement.getValue() == 1) {
                     String key = horizontalLine.getRow() + NumberUtils.currentNumber(pointElement.getCol());
                     String keyBefore = StringUtils.letterBefore(horizontalLine.getRow())
                             + NumberUtils.numberBefore(pointElement.getCol());
@@ -155,10 +161,10 @@ public class PointServiceImpl implements PointService {
                     String keyAfter2 = StringUtils.letterAfter(horizontalLine.getRow())
                             + NumberUtils.numberAfter(pointElement.getCol());
                     forbiddenMap.put(key, true);
-                    forbiddenMap.put(keyBefore,true);
-                    forbiddenMap.put(keyBefore2,true);
-                    forbiddenMap.put(keyAfter,true);
-                    forbiddenMap.put(keyAfter2,true);
+                    forbiddenMap.put(keyBefore, true);
+                    forbiddenMap.put(keyBefore2, true);
+                    forbiddenMap.put(keyAfter, true);
+                    forbiddenMap.put(keyAfter2, true);
                 }
             }
         }
