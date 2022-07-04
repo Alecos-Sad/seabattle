@@ -95,6 +95,20 @@ public class PointServiceImpl implements PointService {
         return isOccupiedCell(row, col, 0);
     }
 
+    /**
+     * метод: getBomb
+     * входные параметры: char, int
+     * возвращает: boolean
+     * реализация:
+     * если isOccupiedCell с value 0 или 2 то
+     * вызвать setSidePoint для side - MINE с value - 3
+     * MyStepSingleton установить в true
+     * если isOccupiedCell с value 1 то
+     * вызвать setSidePoint для side - MINE с value - 2
+     * MyStepSingleton установить в false
+     * вернуть true
+     * в конце вернуть false
+     */
     @Override
     public boolean getBomb(char row, int col) {
         if (isOccupiedCell(row, col, 0) || isOccupiedCell(row, col, 2)) {
@@ -108,6 +122,24 @@ public class PointServiceImpl implements PointService {
         return false;
     }
 
+    /**
+     * метод: addShipPoint
+     * входные параметры: char, int
+     * возвращает: void
+     * реализация:
+     * получить карту из ForbiddenCellsSingleton
+     * если в карте нет значения true для ключа составленного из параметров метода (не забываем про лидирующие нули для col)* то
+     * если не panelService.isFullMinePanel()
+     * если setSidePoint для side - MINE и value - 1 то
+     * вызвать метод setForbiddenCells
+     * иначе, вызвать сообщение 1
+     * иначе, вызвать сообщение 2
+     * иначе вызвать сообщение 3
+     * сообщения:
+     * 1 - JOptionPane.showMessageDialog(null, "Нельзя использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+     * 2 - JOptionPane.showMessageDialog(null, "Уже занято допустимое количество ячеек", "Внимание!", JOptionPane.WARNING_MESSAGE);
+     * 3 - JOptionPane.showMessageDialog(null, "Не удалось использовать эту ячейку", "Внимание!", JOptionPane.WARNING_MESSAGE);
+     */
     public void addShipPoint(char row, int col) {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
         String key = (row + NumberUtils.currentNumber(col));
@@ -126,6 +158,14 @@ public class PointServiceImpl implements PointService {
         }
     }
 
+    /**
+     * метод: clearShipPoint
+     * входные параметры: char, int
+     * возвращает: void
+     * реализация:
+     * вызвать метод setSidePoint, где: side - MINE, value - 0
+     * вызвать метод setForbiddenCells
+     */
     public void clearShipPoint(char row, int col) {
         setSidePoint(MINE, row, col, 0);
         setForbiddenCells();
@@ -144,6 +184,21 @@ public class PointServiceImpl implements PointService {
         return panel.get(Constants.VERTICAL_COORDINATE.indexOf(row)).getPointElementList().get(col - 1).getValue() == value;
     }
 
+    /**
+     * метод: setForbiddenCells
+     * входные параметры: нет
+     * возвращает: void
+     * реализация:
+     * извлекаем карту из ForbiddenCellsSingleton
+     * очищаем ее
+     * извлекаем коллекцию из MinePanelSingleton
+     * итерируем всю коллекцию и если ячейка занята (value == 1)
+     * то записываем координаты этой ячейки в карту со значением true
+     * следует учесть, что ключ является составным значением из row и col с лидирующими нулями:
+     * т.е. если row = 'B', col = 2, то в качестве ключа в карту следует положить строку "B02"
+     * также, необходимо запретить использование ячеек вокруг нее по диагонали
+     * пример: если блочим ячейку B02 то блочим так же и A01 A03 C01 C03
+     */
     public void setForbiddenCells() {
         Map<String, Boolean> forbiddenMap = ForbiddenCellsSingleton.instance(null).getForbiddenCellsMap();
         forbiddenMap.clear();

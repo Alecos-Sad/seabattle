@@ -1,6 +1,7 @@
-package edu.javagroup.seabattle.service;
+package edu.javagroup.seabattle.service;//package edu.javagroup.seabattle.service;
 
 import edu.javagroup.seabattle.common.utils.CommonService;
+import edu.javagroup.seabattle.model.ShipPoint;
 import edu.javagroup.seabattle.service.impl.ShipServiceImpl;
 import edu.javagroup.seabattle.singleton.ImReadySingleton;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
@@ -15,6 +16,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * test -> edu.javagroup.seabattle.common.utils.impl.CommonServiceImpl
  *
  * @author kaa
- * @version 1.4
+ * @version 1.5
  */
 @SpringBootTest
 public class ShipServiceTest {
@@ -121,27 +123,45 @@ public class ShipServiceTest {
      * перед запуском этого теста, сменить модификатор метода getVerticalCoordinateList в ShipServiceImpl,
      * после положительного результата проверки, вернуть прежний модификатор
      */
-//    @Test
-//    @Disabled
-//    void getVerticalCoordinateListTest() {
-//        assertThat(new ShipServiceImpl().getVerticalCoordinateList(commonService.getPanel20()).size() == 110).isTrue();
-//    }
-//
-//    /**
-//     * запускать отдельно
-//     * <p>
-//     * перед запуском этого теста, сменить модификатор метода findShipDeck в ShipServiceImpl,
-//     * после положительного результата проверки, вернуть прежний модификатор
-//     */
-//    @Test
-//    @Disabled
-//    void findShipDeckTest() {
-//        MinePanelSingleton.instance(commonService.getPanel20());
-//        ShipServiceImpl shipServiceImpl = new ShipServiceImpl();
-//        shipServiceImpl.checkShipCount();
-//        assertThat(shipServiceImpl.findShipDeck(4) == 1).isTrue();
-//        assertThat(shipServiceImpl.findShipDeck(3) == 2).isTrue();
-//        assertThat(shipServiceImpl.findShipDeck(2) == 3).isTrue();
-//        assertThat(shipServiceImpl.findShipDeck(1) == 4).isTrue();
-//    }
+    @Test
+    @Disabled
+    void getVerticalCoordinateListTest() {
+        assertThat(new ShipServiceImpl().getVerticalCoordinateList(commonService.getPanel20()).size() == 110).isTrue();
+    }
+
+    /**
+     * запускать отдельно
+     * <p>
+     * перед запуском этого теста, сменить модификатор метода getHorizontalCoordinateList и getVerticalCoordinateList в ShipServiceImpl,
+     * после положительного результата проверки, вернуть прежние модификаторы
+     */
+    @Test
+    @Disabled
+    void coordinateListTest() {
+        MinePanelSingleton.instance(commonService.getPanel20());
+        shipService.checkShipCount();
+        ShipServiceImpl shipServiceImpl = new ShipServiceImpl();
+        List<ShipPoint> shipPointList = shipServiceImpl.getHorizontalCoordinateList(MinePanelSingleton.instance(null).getPanel());
+        shipPointList.addAll(shipServiceImpl.getVerticalCoordinateList(MinePanelSingleton.instance(null).getPanel()));
+        AtomicInteger point = new AtomicInteger();
+        shipPointList.forEach(item -> assertThat(item.getPoint() == point.incrementAndGet()).isTrue());
+    }
+
+    /**
+     * запускать отдельно
+     * <p>
+     * перед запуском этого теста, сменить модификатор метода findShipDeck в ShipServiceImpl,
+     * после положительного результата проверки, вернуть прежний модификатор
+     */
+    @Test
+    @Disabled
+    void findShipDeckTest() {
+        MinePanelSingleton.instance(commonService.getPanel20());
+        ShipServiceImpl shipServiceImpl = new ShipServiceImpl();
+        shipServiceImpl.checkShipCount();
+        assertThat(shipServiceImpl.findShipDeck(4) == 1).isTrue();
+        assertThat(shipServiceImpl.findShipDeck(3) == 2).isTrue();
+        assertThat(shipServiceImpl.findShipDeck(2) == 3).isTrue();
+        assertThat(shipServiceImpl.findShipDeck(1) == 4).isTrue();
+    }
 }

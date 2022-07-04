@@ -1,6 +1,7 @@
 package edu.javagroup.seabattle.service.impl;
 
 import edu.javagroup.seabattle.model.HorizontalLine;
+import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.service.PanelService;
 import edu.javagroup.seabattle.singleton.ImReadySingleton;
 import edu.javagroup.seabattle.util.HorizontalLinesUtils;
@@ -93,12 +94,16 @@ public class PanelServiceImpl implements PanelService {
      */
     private int countPointElements(int value, String side) {
         List<HorizontalLine> panel = HorizontalLinesUtils.getHorizontalLines(side);
-        return (int) panel
-                .stream()
-                .map(HorizontalLine::getPointElementList)
-                .flatMap(Collection::stream)
-                .filter(pointElement -> pointElement.getValue() == value)
-                .count();
+        long count = 0L;
+        for (HorizontalLine horizontalLine : panel) {
+            List<PointElement> pointElementList = horizontalLine.getPointElementList();
+            for (PointElement pointElement : pointElementList) {
+                if (pointElement.getValue() == value) {
+                    count++;
+                }
+            }
+        }
+        return (int) count;
     }
 }
 
