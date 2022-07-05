@@ -49,6 +49,7 @@ public class ShipServiceImpl implements ShipService {
             if (coordinateList.get(i).getValue() == 0 && coordinateList.get(i + 1).getValue() == 0) {
                 shipPointList.add(coordinateList.get(i));
                 shipPointList.add(coordinateList.get(i + 1));
+                i = i + 2;
             }
         }
         coordinateList.removeAll(shipPointList);
@@ -137,7 +138,7 @@ public class ShipServiceImpl implements ShipService {
      * выходит, что если пройти по List<HorizontalLine> по горизонтали, мы получим один однопалубный корабль
      * хотя его и нет там, потом мы пройдем по следующей строке и опять получим однопалубный, хотя его нет там
      * выходит, надо понять, где у нас однопалубные корабли, а где остальные
-     *
+     * <p>
      * можно сложить строку из всех value (там может быть только 0 или 1)
      * затем превратить ее в массив, разделив по "0"
      * затем просто делать приращение некоей числовой переменной если длина элемента массива равна пришедшей в качестве параметра переменной
@@ -147,19 +148,27 @@ public class ShipServiceImpl implements ShipService {
         int count = 0;
         StringBuilder stringBuilder = new StringBuilder();
         List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
+
+        for (int i = 0; i < Constants.VERTICAL_COORDINATE.length(); i++) {
+            for (int j = 0; j < 10; j++) {
+                stringBuilder.append(panel.get(i).getPointElementList().get(j).getValue());
+            }
+        }
+
         for (HorizontalLine horizontalLine : panel) {
             for (PointElement pointElement : horizontalLine.getPointElementList()) {
                 stringBuilder.append(pointElement.getValue());
             }
         }
         String[] split = stringBuilder.toString().split("0");
-        for (String str : split) {
-            if (str.length() == numberDeck){
-                count++;
-            }
-        }
-        return (count == 1) ? count / 4 : count;
+//        for (String str : split) {
+//            if (str.length() == numberDeck){
+//                count++;
+//            }
+//        }
+        return 1;
     }
 }
+
 
 
