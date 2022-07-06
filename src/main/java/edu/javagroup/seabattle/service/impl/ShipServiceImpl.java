@@ -41,41 +41,22 @@ public class ShipServiceImpl implements ShipService {
      * и отсортировать коллекцию coordinateList по полю point
      */
     public void getCoordinateList(List<HorizontalLine> panel) {
-        List<ShipPoint> coordinateList = new ArrayList<>();
+        coordinateList = new ArrayList<>(220);
         coordinateList.addAll(getHorizontalCoordinateList(panel));
         coordinateList.addAll(getVerticalCoordinateList(panel));
         List<ShipPoint> shipPointList = new ArrayList<>();
-        for (int i = 0; i < coordinateList.size(); i++) {
+        for (int i = 1; i < coordinateList.size(); i++) {
             if (coordinateList.get(i).getValue() == 0 && coordinateList.get(i + 1).getValue() == 0) {
                 shipPointList.add(coordinateList.get(i));
                 shipPointList.add(coordinateList.get(i + 1));
-                i = i + 2;
+
             }
         }
         coordinateList.removeAll(shipPointList);
         coordinateList.sort(Comparator.comparing(ShipPoint::getPoint));
     }
 
-    /**
-     * метод: getHorizontalCoordinateList
-     * входные параметры: List<HorizontalLine>
-     * возвращает: List<ShipPoint>
-     * реализация:
-     * создать коллекцию (1) List<ShipPoint> нужной размерности
-     * создать числовую переменную (чп) со значением 1
-     * начало цикла по List<HorizontalLine>
-     * получить List<PointElement> (2)
-     * начало цикла по List<PointElement> (2)
-     * положить в коллекцию List<ShipPoint> (1) один ShipPoint где в качестве параметров: (чп) и value PointElement
-     * прирастить (чп)
-     * конец цикла по (2)
-     * вложить в коллекцию (1) ShipPoint с параметрами: (чп) и 0
-     * прирастить (чп)
-     * конец цикла по panel
-     * вернуть коллекцию (1)
-     * <p>
-     * пояснение: в данной ситуации мы просто перебираем List<HorizontalLine> по горизонтали
-     */
+
     public List<ShipPoint> getHorizontalCoordinateList(List<HorizontalLine> panel) {
         List<ShipPoint> shipPointList = new ArrayList<>(110);
         int count = 1;

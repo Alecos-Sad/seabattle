@@ -1,4 +1,4 @@
-package edu.javagroup.seabattle.service;//package edu.javagroup.seabattle.service;
+package edu.javagroup.seabattle.service;
 
 import edu.javagroup.seabattle.common.utils.CommonService;
 import edu.javagroup.seabattle.model.ShipPoint;
@@ -144,7 +144,7 @@ public class ShipServiceTest {
         List<ShipPoint> shipPointList = shipServiceImpl.getHorizontalCoordinateList(MinePanelSingleton.instance(null).getPanel());
         shipPointList.addAll(shipServiceImpl.getVerticalCoordinateList(MinePanelSingleton.instance(null).getPanel()));
         AtomicInteger point = new AtomicInteger();
-       shipPointList.forEach(item -> assertThat(item.getPoint() == point.incrementAndGet()).isTrue());
+        shipPointList.forEach(item -> assertThat(item.getPoint() == point.incrementAndGet()).isTrue());
     }
 
     /**
