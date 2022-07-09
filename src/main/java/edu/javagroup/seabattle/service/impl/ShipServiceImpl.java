@@ -17,11 +17,47 @@ public class ShipServiceImpl implements ShipService {
 
     private List<ShipPoint> coordinateList;
 
+    /**
+     * метод: checkShipCount
+     * входные параметры: нет
+     * возвращает: boolean
+     * реализация:
+     * получить коллекцию из MinePanelSingleton
+     * вызвать метод getCoordinateList куда отправить полученную коллекцию
+     * создать карту и вложить в нее
+     * ключ - "4deck", значение - результат выполнения метода findShipDeck с параметром 4
+     * ключ - "3deck", значение - результат выполнения метода findShipDeck с параметром 3
+     * ключ - "2deck", значение - результат выполнения метода findShipDeck с параметром 2
+     * ключ - "1deck", значение - результат выполнения метода findShipDeck с параметром 1
+     * вложить полученную карту в ShipStorageSingleton
+     * вернуть
+     * если в карте значение полученное по ключу "4deck" равно 1
+     * и если в карте значение полученное по ключу "3deck" равно 2
+     * и если в карте значение полученное по ключу "2deck" равно 3
+     * и если в карте значение полученное по ключу "1deck" равно 4
+     * примечание: ключ в любой момент может изменится, надо использовать константы
+     *
+     * @return
+     */
     public boolean checkShipCount() {
         List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
+        getCoordinateList(panel);
+
         return false;
     }
 
+    /**
+     * метод: checkShipCount
+     * входные параметры: int (количество палуб)
+     * возвращает: int
+     * реализация:
+     * используя метод getCoordinateList инициализируйте поле coordinateList
+     * затем, надо понять сколько у вас кораблей указанной размерности (параметр метода)
+     * при этом, метод должен
+     * до начала игры, определять количество установленных кораблей согласно их размерности
+     * определить начало игры можно по состоянию ImReadySingleton
+     * примечание: реализация этого метода необязательна, см. task #16
+     */
     public int checkShipCount(int numberDecks) {
         return 0;
     }
@@ -49,7 +85,6 @@ public class ShipServiceImpl implements ShipService {
             if (coordinateList.get(i).getValue() == 0 && coordinateList.get(i + 1).getValue() == 0) {
                 shipPointList.add(coordinateList.get(i));
                 shipPointList.add(coordinateList.get(i + 1));
-
             }
         }
         coordinateList.removeAll(shipPointList);
@@ -90,7 +125,7 @@ public class ShipServiceImpl implements ShipService {
      */
     public List<ShipPoint> getVerticalCoordinateList(List<HorizontalLine> panel) {
         List<ShipPoint> shipPointList = new ArrayList<>(110);
-        int count = 1;
+        int count = 111;
         for (int i = 0; i < Constants.VERTICAL_COORDINATE.length(); i++) {
             for (int j = 0; j < 10; j++) {
                 int value = panel.get(i).getPointElementList().get(j).getValue();
@@ -98,6 +133,7 @@ public class ShipServiceImpl implements ShipService {
                 count++;
             }
             shipPointList.add(new ShipPoint(count, 0));
+            count++;
         }
         return shipPointList;
     }
@@ -127,27 +163,20 @@ public class ShipServiceImpl implements ShipService {
      */
     public int findShipDeck(int numberDeck) {
         int count = 0;
-        StringBuilder stringBuilder = new StringBuilder();
-        List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
+        StringBuilder stringCollection = new StringBuilder();
 
-        for (int i = 0; i < Constants.VERTICAL_COORDINATE.length(); i++) {
-            for (int j = 0; j < 10; j++) {
-                stringBuilder.append(panel.get(i).getPointElementList().get(j).getValue());
-            }
+        for (ShipPoint shipPoint : coordinateList) {
+            stringCollection.append(shipPoint.getValue());
         }
 
-        for (HorizontalLine horizontalLine : panel) {
-            for (PointElement pointElement : horizontalLine.getPointElementList()) {
-                stringBuilder.append(pointElement.getValue());
+        String[] split = stringCollection.toString().split("0");
+
+        for (String str : split) {
+            if (str.length() == numberDeck) {
+                count++;
             }
         }
-        String[] split = stringBuilder.toString().split("0");
-//        for (String str : split) {
-//            if (str.length() == numberDeck){
-//                count++;
-//            }
-//        }
-        return 1;
+        return (numberDeck == 1) ? count / 4 : count;
     }
 }
 
