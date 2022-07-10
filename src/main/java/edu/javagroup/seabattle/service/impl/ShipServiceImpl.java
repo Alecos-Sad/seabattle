@@ -6,11 +6,13 @@ import edu.javagroup.seabattle.model.PointElement;
 import edu.javagroup.seabattle.model.ShipPoint;
 import edu.javagroup.seabattle.service.ShipService;
 import edu.javagroup.seabattle.singleton.MinePanelSingleton;
+import edu.javagroup.seabattle.constants.Constants.*;
+import edu.javagroup.seabattle.singleton.ShipStorageSingleton;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
+import static edu.javagroup.seabattle.constants.Constants.DECK;
 
 @Component
 public class ShipServiceImpl implements ShipService {
@@ -40,10 +42,17 @@ public class ShipServiceImpl implements ShipService {
      * @return
      */
     public boolean checkShipCount() {
-        List<HorizontalLine> panel = MinePanelSingleton.instance(null).getPanel();
-        getCoordinateList(panel);
-
-        return false;
+        getCoordinateList(MinePanelSingleton.instance(null).getPanel());
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put(("4" + DECK), findShipDeck(4));
+        resultMap.put(("3" + DECK), findShipDeck(3));
+        resultMap.put(("2" + DECK), findShipDeck(2));
+        resultMap.put(("1" + DECK), findShipDeck(1));
+        ShipStorageSingleton.instance(resultMap);
+        return ShipStorageSingleton.instance(null).getShipMap().get("4" + DECK) == 1 &&
+                ShipStorageSingleton.instance(null).getShipMap().get("3" + DECK) == 2 &&
+                ShipStorageSingleton.instance(null).getShipMap().get("2" + DECK) == 3 &&
+                ShipStorageSingleton.instance(null).getShipMap().get("1" + DECK) == 4;
     }
 
     /**
@@ -81,11 +90,15 @@ public class ShipServiceImpl implements ShipService {
         coordinateList.addAll(getHorizontalCoordinateList(panel));
         coordinateList.addAll(getVerticalCoordinateList(panel));
         List<ShipPoint> shipPointList = new ArrayList<>();
-        for (int i = 1; i < coordinateList.size(); i++) {
-            if (coordinateList.get(i).getValue() == 0 && coordinateList.get(i + 1).getValue() == 0) {
+        for (int i = 2; i < coordinateList.size() - 1; i++) {
+            int increment = i + 1;
+
+            if (coordinateList.get(i).getValue() == 0 && coordinateList.get(increment).getValue() == 0) {
                 shipPointList.add(coordinateList.get(i));
                 shipPointList.add(coordinateList.get(i + 1));
+                //i = i + 2;
             }
+
         }
         coordinateList.removeAll(shipPointList);
         coordinateList.sort(Comparator.comparing(ShipPoint::getPoint));
@@ -94,7 +107,7 @@ public class ShipServiceImpl implements ShipService {
 
     public List<ShipPoint> getHorizontalCoordinateList(List<HorizontalLine> panel) {
         List<ShipPoint> shipPointList = new ArrayList<>(110);
-        int count = 1;
+        int count = 0;
         for (HorizontalLine horizontalLine : panel) {
             List<PointElement> pointElementList = horizontalLine.getPointElementList();
             for (PointElement pointElement : pointElementList) {
@@ -164,7 +177,7 @@ public class ShipServiceImpl implements ShipService {
     public int findShipDeck(int numberDeck) {
         int count = 0;
         StringBuilder stringCollection = new StringBuilder();
-
+        getCoordinateList(MinePanelSingleton.instance(null).getPanel());
         for (ShipPoint shipPoint : coordinateList) {
             stringCollection.append(shipPoint.getValue());
         }

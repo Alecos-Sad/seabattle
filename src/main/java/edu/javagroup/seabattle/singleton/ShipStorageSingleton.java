@@ -9,6 +9,7 @@ import java.util.Map;
  * и это поле должно возвращаться методом getShipMap
  */
 public class ShipStorageSingleton {
+
     private static ShipStorageSingleton instance;
     private final Map<String, Integer> shipStorageCellsMap;
 
