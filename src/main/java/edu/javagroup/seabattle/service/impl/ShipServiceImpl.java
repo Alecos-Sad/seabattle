@@ -90,15 +90,12 @@ public class ShipServiceImpl implements ShipService {
         coordinateList.addAll(getHorizontalCoordinateList(panel));
         coordinateList.addAll(getVerticalCoordinateList(panel));
         List<ShipPoint> shipPointList = new ArrayList<>();
-        for (int i = 2; i < coordinateList.size() - 1; i++) {
-            int increment = i + 1;
-
-            if (coordinateList.get(i).getValue() == 0 && coordinateList.get(increment).getValue() == 0) {
+        for (int i = 1; i < coordinateList.size(); i++) {
+            if (coordinateList.get(i).getValue() == 0 && coordinateList.get(i + 1).getValue() == 0) {
                 shipPointList.add(coordinateList.get(i));
                 shipPointList.add(coordinateList.get(i + 1));
-                //i = i + 2;
             }
-
+            i = i + 2;
         }
         coordinateList.removeAll(shipPointList);
         coordinateList.sort(Comparator.comparing(ShipPoint::getPoint));
@@ -107,7 +104,7 @@ public class ShipServiceImpl implements ShipService {
 
     public List<ShipPoint> getHorizontalCoordinateList(List<HorizontalLine> panel) {
         List<ShipPoint> shipPointList = new ArrayList<>(110);
-        int count = 0;
+        int count = 1;
         for (HorizontalLine horizontalLine : panel) {
             List<PointElement> pointElementList = horizontalLine.getPointElementList();
             for (PointElement pointElement : pointElementList) {
@@ -181,7 +178,6 @@ public class ShipServiceImpl implements ShipService {
         for (ShipPoint shipPoint : coordinateList) {
             stringCollection.append(shipPoint.getValue());
         }
-
         String[] split = stringCollection.toString().split("0");
 
         for (String str : split) {
