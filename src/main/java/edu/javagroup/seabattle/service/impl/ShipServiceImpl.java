@@ -42,6 +42,7 @@ public class ShipServiceImpl implements ShipService {
      * @return
      */
     public boolean checkShipCount() {
+
         getCoordinateList(MinePanelSingleton.instance(null).getPanel());
         Map<String, Integer> resultMap = new HashMap<>();
         resultMap.put(("4" + DECK), findShipDeck(4));
